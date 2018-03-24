@@ -14,9 +14,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/forms/sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Parent root = FXMLLoader.load(getClass().getResource("/forms/main.fxml"));
+        primaryStage.setTitle("Global Optimization");
+        primaryStage.setScene(new Scene(root, 1000, 460));
         primaryStage.show();
     }
 

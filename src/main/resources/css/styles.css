@@ -1,0 +1,51 @@
+.text-field,
+.button,
+.combo {
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1px;
+    -fx-border-color: #d8dce2;
+}
+
+.text-field,
+.combo {
+    -fx-font-size: 14px;
+}
+
+.button {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.button:hover,
+.text-field:hover,
+.text-field:focused,
+.combo:hover,
+.combo:focused,
+.radio-button:hover .radio {
+    -fx-border-color: #c5c9cf;
+}
+
+.button:pressed {
+    -fx-border-color: #c5c9cf;
+    -fx-background-color: #f1f4f8;
+}
+
+.radio-button .dot,
+.radio-button .radio {
+    -fx-background-color: #ffffff;
+}
+
+.radio-button .radio {
+    -fx-border-color: #d8dce2;
+    -fx-border-radius: 10px;
+}
+
+.radio-button:selected .radio {
+    -fx-border-color: #2f93e1;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: #2f93e1;
+}
