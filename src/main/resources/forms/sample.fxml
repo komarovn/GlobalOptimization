@@ -1,0 +1,9 @@
+<!--
+ * Copyright (c) Lobachevsky University, 2018. All rights reserved.
+ * Developed by: Nikolay Komarov.
+-->
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane fx:controller="com.optimization.application.Controller"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+</GridPane>
