@@ -15,7 +15,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="514.0" prefWidth="843.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="514.0" prefWidth="843.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.optimization.application.Controller">
     <children>
         <Pane prefHeight="112.0" prefWidth="843.0" styleClass="pane">
          <children>
@@ -57,12 +58,12 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="stopByValueField1" layoutX="757.0" layoutY="54.0" prefHeight="32.0" prefWidth="72.0" styleClass="text-field">
+            <TextField fx:id="rValueField" layoutX="757.0" layoutY="54.0" prefHeight="32.0" prefWidth="72.0" styleClass="text-field">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Label layoutX="741.0" layoutY="60.0" text="r:">
+            <Label fx:id="rLabel" layoutX="741.0" layoutY="60.0" text="r:">
                <font>
                   <Font size="14.0" />
                </font>
