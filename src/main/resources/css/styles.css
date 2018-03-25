@@ -1,3 +1,7 @@
+.pane {
+    -fx-background-color: #f8f8f9;
+}
+
 .text-field,
 .button,
 .combo {

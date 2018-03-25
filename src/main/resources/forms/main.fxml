@@ -10,13 +10,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="514.0" prefWidth="843.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Pane prefHeight="112.0" prefWidth="843.0" style="-fx-background-color: #f8f8f9;">
+        <Pane prefHeight="112.0" prefWidth="843.0" styleClass="pane">
          <children>
             <Label layoutX="14.0" layoutY="17.0" text="Function:">
                <font>
@@ -28,16 +29,49 @@
                   <Font size="14.0" />
                </font></TextField>
             <ComboBox fx:id="methodSelector" layoutX="78.0" layoutY="54.0" prefHeight="32.0" prefWidth="150.0" styleClass="combo" />
-            <RadioButton layoutX="303.0" layoutY="60.0" mnemonicParsing="false" styleClass="radio-button" text="Iterations Count">
+            <RadioButton fx:id="iterationsCountRadio" layoutX="422.0" layoutY="60.0" mnemonicParsing="false" styleClass="radio-button" text="Iterations Count">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="stopByGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="precisionRadio" layoutX="313.0" layoutY="60.0" mnemonicParsing="false" selected="true" styleClass="radio-button" text="Precision ε" toggleGroup="$stopByGroup">
                <font>
                   <Font size="14.0" />
                </font>
             </RadioButton>
+            <Label layoutX="254.0" layoutY="60.0" text="Stop by">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="60.0" text="Method:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="stopByValueField" layoutX="567.0" layoutY="54.0" prefHeight="32.0" prefWidth="72.0" styleClass="text-field">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="stopByValueField1" layoutX="757.0" layoutY="54.0" prefHeight="32.0" prefWidth="72.0" styleClass="text-field">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <Label layoutX="741.0" layoutY="60.0" text="r:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
          </children></Pane>
-        <Pane fx:id="plotArea" prefHeight="272.0" prefWidth="843.0" style="-fx-background-color: #f8f8f9;" />
-      <Pane prefHeight="144.0" prefWidth="843.0" style="-fx-background-color: #f8f8f9;">
+        <Pane fx:id="plotArea" prefHeight="272.0" prefWidth="843.0" styleClass="pane" />
+      <Pane prefHeight="144.0" prefWidth="843.0" styleClass="pane">
          <children>
-            <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="72.0" styleClass="button" text="Process">
+            <Button fx:id="processButton" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="72.0" styleClass="button" text="Process">
             </Button>
             <Label layoutX="519.0" layoutY="7.0" text="Results">
                <font>
@@ -55,6 +89,21 @@
                </font>
             </Label>
             <Label layoutX="519.0" layoutY="82.0" text="Function Value:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="iterationsCountValue" layoutX="640.0" layoutY="42.0" text="0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="argumentValue" layoutX="640.0" layoutY="62.0" text="0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="functionValue" layoutX="640.0" layoutY="82.0" text="0">
                <font>
                   <Font size="14.0" />
                </font>
