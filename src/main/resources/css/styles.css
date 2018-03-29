@@ -16,6 +16,10 @@
     -fx-font-size: 14px;
 }
 
+.text-field__invalid {
+    -fx-border-color: #df3629 !important;
+}
+
 .button {
     -fx-font-size: 12px;
     -fx-font-weight: bold;

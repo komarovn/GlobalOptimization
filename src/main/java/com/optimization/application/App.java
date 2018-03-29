@@ -14,7 +14,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/forms/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/forms/main.fxml"));
+        Parent root = loader.load();
+
+        Controller controller = loader.getController();
+        AppModel model = new AppModel();
+        controller.setModel(model);
+
         primaryStage.setTitle("Global Optimization");
         primaryStage.setScene(new Scene(root, 1000, 460));
         primaryStage.show();
