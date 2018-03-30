@@ -16,6 +16,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+    private final String INVALID_FIELD_CLS = "text-field__invalid";
+
     private AppModel model;
 
     @FXML
@@ -90,7 +92,6 @@ public class Controller implements Initializable {
     }
 
     private void initFunctionField() {
-        final String invalidFieldCls = "text-field__invalid";
         functionField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String value) {
@@ -102,11 +103,11 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
                 if (!isFocused) {
                     if (!model.validateFunctionExpression()) {
-                        if (!functionField.getStyleClass().contains(invalidFieldCls)) {
-                            functionField.getStyleClass().add(invalidFieldCls);
+                        if (!functionField.getStyleClass().contains(INVALID_FIELD_CLS)) {
+                            functionField.getStyleClass().add(INVALID_FIELD_CLS);
                         }
                     } else {
-                        functionField.getStyleClass().remove(invalidFieldCls);
+                        functionField.getStyleClass().remove(INVALID_FIELD_CLS);
                     }
                 }
             }
@@ -114,26 +115,57 @@ public class Controller implements Initializable {
     }
 
     private void initStopParamField() {
-        
+        precisionRadio.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean selected) {
+                if (selected) {
+                    stopByValueField.setText(String.valueOf(model.getPrecision()));
+                }
+            }
+        });
+        iterationsCountRadio.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean selected) {
+                if (selected) {
+                    stopByValueField.setText(String.valueOf(model.getIterationsCount()));
+                }
+            }
+        });
+        stopByValueField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String value) {
+
+            }
+        });
+        stopByValueField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
+                if (!isFocused && !stopByValueField.getText().isEmpty()) {
+                    if (precisionRadio.isSelected()) {
+                        model.setPrecision(Double.valueOf(stopByValueField.getText()));
+                        stopByValueField.setText(String.valueOf(model.getPrecision()));
+                    } else if (iterationsCountRadio.isSelected()) {
+                        model.setIterationsCount(Integer.valueOf(stopByValueField.getText()));
+                        stopByValueField.setText(String.valueOf(model.getIterationsCount()));
+                    }
+                }
+            }
+        });
     }
 
     private void initRValueField() {
         rValueField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String value) {
-                try {
-                    Double.valueOf(value);
-                } catch (Exception e) {
-                    rValueField.setText(oldValue);
-                }
+
             }
         });
         rValueField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
-                if (!isFocused) {
+                if (!isFocused && !rValueField.getText().isEmpty()) {
                     model.setrParameter(Double.valueOf(rValueField.getText()));
-                    //rValueField.setText(String.valueOf(model.getrParameter()));
+                    rValueField.setText(String.valueOf(model.getrParameter()));
                 }
             }
         });

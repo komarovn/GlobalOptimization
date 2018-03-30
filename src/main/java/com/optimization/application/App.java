@@ -21,7 +21,7 @@ public class App extends Application {
         AppModel model = new AppModel();
         controller.setModel(model);
 
-        primaryStage.setTitle("Global Optimization");
+        primaryStage.setTitle(StringResources.APP_NAME);
         primaryStage.setScene(new Scene(root, 1000, 460));
         primaryStage.show();
     }

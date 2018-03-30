@@ -28,9 +28,7 @@
 
 .button:hover,
 .text-field:hover,
-.text-field:focused,
 .combo:hover,
-.combo:focused,
 .radio-button:hover .radio {
     -fx-border-color: #c5c9cf;
 }
@@ -38,6 +36,12 @@
 .button:pressed {
     -fx-border-color: #c5c9cf;
     -fx-background-color: #f1f4f8;
+}
+
+.text-field:focused,
+.combo:focused,
+.button:focused {
+    -fx-border-color: #95999f;
 }
 
 .radio-button .dot,
