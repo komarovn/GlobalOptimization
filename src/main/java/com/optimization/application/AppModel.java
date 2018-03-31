@@ -11,6 +11,8 @@ public class AppModel {
     private int iterationsCount;
     private double precision;
     private double rParameter;
+    private double leftBoundInterval;
+    private double rightBoundInterval;
 
     private int iterationsCountResult;
     private double argumentValueResult;
@@ -80,6 +82,22 @@ public class AppModel {
 
     public void setrParameter(double r) {
         this.rParameter = r;
+    }
+
+    public double getLeftBoundInterval() {
+        return leftBoundInterval;
+    }
+
+    public void setLeftBoundInterval(double leftBoundInterval) {
+        this.leftBoundInterval = leftBoundInterval;
+    }
+
+    public double getRightBoundInterval() {
+        return rightBoundInterval;
+    }
+
+    public void setRightBoundInterval(double rightBoundInterval) {
+        this.rightBoundInterval = rightBoundInterval;
     }
 
     public int getIterationsCountResult() {

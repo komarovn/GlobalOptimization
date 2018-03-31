@@ -49,6 +49,12 @@ public class Controller implements Initializable {
     @FXML
     private TextField rValueField;
 
+    @FXML
+    private TextField leftBoundIntervalField;
+
+    @FXML
+    private TextField rightBoundIntervalField;
+
     // Results
 
     @FXML
@@ -70,6 +76,7 @@ public class Controller implements Initializable {
         initFunctionField();
         initStopParamField();
         initRValueField();
+        initIntervalFields();
         initResultsSection();
     }
 
@@ -89,7 +96,6 @@ public class Controller implements Initializable {
                 rValueField.setVisible(isLipschitzMethod);
             }
         });
-
     }
 
     private void initFunctionField() {
@@ -103,13 +109,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
                 if (!isFocused) {
-                    if (!model.validateFunctionExpression()) {
-                        if (!functionField.getStyleClass().contains(INVALID_FIELD_CLS)) {
-                            functionField.getStyleClass().add(INVALID_FIELD_CLS);
-                        }
-                    } else {
-                        functionField.getStyleClass().remove(INVALID_FIELD_CLS);
-                    }
+                    changeFieldValidation(functionField, model.validateFunctionExpression());
                 }
             }
         });
@@ -184,6 +184,27 @@ public class Controller implements Initializable {
         });
     }
 
+    private void initIntervalFields() {
+        leftBoundIntervalField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
+                if (!isFocused) {
+                    processLeftBound();
+                    processRightBound();
+                }
+            }
+        });
+        rightBoundIntervalField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
+                if (!isFocused) {
+                    processRightBound();
+                    processLeftBound();
+                }
+            }
+        });
+    }
+
     private void changeFieldValidation(TextField field, boolean isValid) {
         if (isValid) {
             field.getStyleClass().remove(INVALID_FIELD_CLS);
@@ -208,6 +229,40 @@ public class Controller implements Initializable {
             return false;
         }
         return true;
+    }
+
+    private void processLeftBound() {
+        boolean isValid = false;
+
+        if (validateDoubleValue(leftBoundIntervalField.getText())) {
+            double left = Double.valueOf(leftBoundIntervalField.getText());
+            double right = model.getRightBoundInterval();
+
+            if (left <= right) {
+                model.setLeftBoundInterval(left);
+                leftBoundIntervalField.setText(String.valueOf(model.getLeftBoundInterval()));
+                isValid = true;
+            }
+        }
+
+        changeFieldValidation(leftBoundIntervalField, isValid);
+    }
+
+    private void processRightBound() {
+        boolean isValid = false;
+
+        if (validateDoubleValue(rightBoundIntervalField.getText())) {
+            double left = model.getLeftBoundInterval();
+            double right = Double.valueOf(rightBoundIntervalField.getText());
+
+            if (left <= right) {
+                model.setRightBoundInterval(right);
+                rightBoundIntervalField.setText(String.valueOf(model.getRightBoundInterval()));
+                isValid = true;
+            }
+        }
+
+        changeFieldValidation(rightBoundIntervalField, isValid);
     }
 
     private void initResultsSection() {
