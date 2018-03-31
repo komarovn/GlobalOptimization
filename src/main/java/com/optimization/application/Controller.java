@@ -74,10 +74,11 @@ public class Controller implements Initializable {
     }
 
     private void initMethodSelector() {
+        methodSelector.setPromptText(StringResources.CHOOSE_METHOD);
         methodSelector.getItems().addAll(FXCollections.observableArrayList(
-                new Method("scan", "Scan"),
-                new Method("piyavskii", "Piyavskii's"),
-                new Method("strongin", "Strongin's")));
+                new Method("scan", StringResources.SCAN_METHOD),
+                new Method("piyavskii", StringResources.PIYAVSKII_METHOD),
+                new Method("strongin", StringResources.STRONGIN_METHOD)));
         methodSelector.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Method>() {
             @Override
             public void changed(ObservableValue<? extends Method> observable, Method oldValue, Method value) {

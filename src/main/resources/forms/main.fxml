@@ -15,8 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="514.0" prefWidth="843.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.optimization.application.Controller">
+<VBox prefHeight="514.0" prefWidth="843.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optimization.application.Controller">
     <children>
         <Pane prefHeight="112.0" prefWidth="843.0" styleClass="pane">
          <children>
@@ -29,7 +28,7 @@
                <font>
                   <Font size="14.0" />
                </font></TextField>
-            <ComboBox fx:id="methodSelector" layoutX="78.0" layoutY="54.0" prefHeight="32.0" prefWidth="150.0" styleClass="combo" />
+            <ComboBox fx:id="methodSelector" layoutX="78.0" layoutY="54.0" prefHeight="32.0" prefWidth="165.0" styleClass="combo" />
             <RadioButton fx:id="iterationsCountRadio" layoutX="422.0" layoutY="60.0" mnemonicParsing="false" styleClass="radio-button" text="Iterations Count">
                <font>
                   <Font size="14.0" />
@@ -53,7 +52,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="stopByValueField" layoutX="567.0" layoutY="54.0" prefHeight="32.0" prefWidth="72.0" styleClass="text-field">
+            <TextField fx:id="stopByValueField" layoutX="634.0" layoutY="54.0" prefHeight="32.0" prefWidth="72.0" styleClass="text-field">
                <font>
                   <Font size="14.0" />
                </font>
@@ -64,6 +63,11 @@
                </font>
             </TextField>
             <Label fx:id="rLabel" layoutX="741.0" layoutY="60.0" text="r:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="560.0" layoutY="60.0" text="with Value:">
                <font>
                   <Font size="14.0" />
                </font>
