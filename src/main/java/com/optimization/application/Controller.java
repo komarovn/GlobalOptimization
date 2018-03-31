@@ -120,6 +120,8 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean selected) {
                 if (selected) {
                     stopByValueField.setText(String.valueOf(model.getPrecision()));
+                } else {
+                    changeFieldValidation(stopByValueField, true);
                 }
             }
         });
@@ -128,47 +130,83 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean selected) {
                 if (selected) {
                     stopByValueField.setText(String.valueOf(model.getIterationsCount()));
+                } else {
+                    changeFieldValidation(stopByValueField, true);
                 }
-            }
-        });
-        stopByValueField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String value) {
-
             }
         });
         stopByValueField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
-                if (!isFocused && !stopByValueField.getText().isEmpty()) {
+                if (!isFocused) {
+                    boolean isValid = true;
+
                     if (precisionRadio.isSelected()) {
-                        model.setPrecision(Double.valueOf(stopByValueField.getText()));
-                        stopByValueField.setText(String.valueOf(model.getPrecision()));
+                        isValid = validateDoubleValue(stopByValueField.getText()) &&
+                                Double.valueOf(stopByValueField.getText()) >= 0;
+
+                        if (isValid) {
+                            model.setPrecision(Double.valueOf(stopByValueField.getText()));
+                            stopByValueField.setText(String.valueOf(model.getPrecision()));
+                        }
                     } else if (iterationsCountRadio.isSelected()) {
-                        model.setIterationsCount(Integer.valueOf(stopByValueField.getText()));
-                        stopByValueField.setText(String.valueOf(model.getIterationsCount()));
+                        isValid = validateIntValue(stopByValueField.getText()) &&
+                                Integer.valueOf(stopByValueField.getText()) >= 0;
+
+                        if (isValid) {
+                            model.setIterationsCount(Integer.valueOf(stopByValueField.getText()));
+                            stopByValueField.setText(String.valueOf(model.getIterationsCount()));
+                        }
                     }
+
+                    changeFieldValidation(stopByValueField, isValid);
                 }
             }
         });
     }
 
     private void initRValueField() {
-        rValueField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String value) {
-
-            }
-        });
         rValueField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
-                if (!isFocused && !rValueField.getText().isEmpty()) {
-                    model.setrParameter(Double.valueOf(rValueField.getText()));
-                    rValueField.setText(String.valueOf(model.getrParameter()));
+                if (!isFocused) {
+                    boolean isValid = validateDoubleValue(rValueField.getText());
+
+                    if (isValid) {
+                        model.setrParameter(Double.valueOf(rValueField.getText()));
+                        rValueField.setText(String.valueOf(model.getrParameter()));
+                    }
+
+                    changeFieldValidation(rValueField, isValid);
                 }
             }
         });
+    }
+
+    private void changeFieldValidation(TextField field, boolean isValid) {
+        if (isValid) {
+            field.getStyleClass().remove(INVALID_FIELD_CLS);
+        } else if (!field.getStyleClass().contains(INVALID_FIELD_CLS)) {
+            field.getStyleClass().add(INVALID_FIELD_CLS);
+        }
+    }
+
+    private boolean validateDoubleValue(String value) {
+        try {
+            Double.valueOf(value);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateIntValue(String value) {
+        try {
+            Integer.valueOf(value);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     private void initResultsSection() {
