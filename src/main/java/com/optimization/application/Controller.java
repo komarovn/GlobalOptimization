@@ -7,18 +7,21 @@ package com.optimization.application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable {
     private final String INVALID_FIELD_CLS = "text-field__invalid";
 
     private AppModel model;
+    private Set<Control> invalidControls = new HashSet<Control>();
 
     @FXML
     private Button processButton;
@@ -77,10 +80,12 @@ public class Controller implements Initializable {
         initStopParamField();
         initRValueField();
         initIntervalFields();
+        initProcessButton();
         initResultsSection();
     }
 
     private void initMethodSelector() {
+        invalidControls.add(methodSelector);
         methodSelector.setPromptText(StringResources.CHOOSE_METHOD);
         methodSelector.getItems().addAll(FXCollections.observableArrayList(
                 new Method("scan", StringResources.SCAN_METHOD),
@@ -89,16 +94,27 @@ public class Controller implements Initializable {
         methodSelector.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Method>() {
             @Override
             public void changed(ObservableValue<? extends Method> observable, Method oldValue, Method value) {
+                invalidControls.remove(methodSelector);
                 model.setMethodName(value.getValue());
 
                 boolean isLipschitzMethod = "piyavskii".equals(value.getValue()) || "strongin".equals(value.getValue());
+
+                if (isLipschitzMethod) {
+                    invalidControls.add(rValueField);
+                    processRValue();
+                } else {
+                    invalidControls.remove(rValueField);
+                }
+
                 rLabel.setVisible(isLipschitzMethod);
                 rValueField.setVisible(isLipschitzMethod);
+                validateProcessButton();
             }
         });
     }
 
     private void initFunctionField() {
+        invalidControls.add(functionField);
         functionField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String value) {
@@ -110,12 +126,14 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
                 if (!isFocused) {
                     changeFieldValidation(functionField, model.validateFunctionExpression());
+                    validateProcessButton();
                 }
             }
         });
     }
 
     private void initStopParamField() {
+        invalidControls.add(stopByValueField);
         precisionRadio.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean selected) {
@@ -161,36 +179,35 @@ public class Controller implements Initializable {
                     }
 
                     changeFieldValidation(stopByValueField, isValid);
+                    validateProcessButton();
                 }
             }
         });
     }
 
     private void initRValueField() {
+        rValueField.setVisible(false);
+        rLabel.setVisible(false);
         rValueField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
                 if (!isFocused) {
-                    boolean isValid = validateDoubleValue(rValueField.getText());
-
-                    if (isValid) {
-                        model.setrParameter(Double.valueOf(rValueField.getText()));
-                        rValueField.setText(String.valueOf(model.getrParameter()));
-                    }
-
-                    changeFieldValidation(rValueField, isValid);
+                    processRValue();
                 }
             }
         });
     }
 
     private void initIntervalFields() {
+        invalidControls.add(leftBoundIntervalField);
+        invalidControls.add(rightBoundIntervalField);
         leftBoundIntervalField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
                 if (!isFocused) {
                     processLeftBound();
                     processRightBound();
+                    validateProcessButton();
                 }
             }
         });
@@ -200,6 +217,7 @@ public class Controller implements Initializable {
                 if (!isFocused) {
                     processRightBound();
                     processLeftBound();
+                    validateProcessButton();
                 }
             }
         });
@@ -208,8 +226,13 @@ public class Controller implements Initializable {
     private void changeFieldValidation(TextField field, boolean isValid) {
         if (isValid) {
             field.getStyleClass().remove(INVALID_FIELD_CLS);
-        } else if (!field.getStyleClass().contains(INVALID_FIELD_CLS)) {
-            field.getStyleClass().add(INVALID_FIELD_CLS);
+            invalidControls.remove(field);
+        } else {
+            invalidControls.add(field);
+
+            if (!field.getStyleClass().contains(INVALID_FIELD_CLS)) {
+                field.getStyleClass().add(INVALID_FIELD_CLS);
+            }
         }
     }
 
@@ -229,6 +252,18 @@ public class Controller implements Initializable {
             return false;
         }
         return true;
+    }
+
+    private void processRValue() {
+        boolean isValid = validateDoubleValue(rValueField.getText());
+
+        if (isValid) {
+            model.setrParameter(Double.valueOf(rValueField.getText()));
+            rValueField.setText(String.valueOf(model.getrParameter()));
+        }
+
+        changeFieldValidation(rValueField, isValid);
+        validateProcessButton();
     }
 
     private void processLeftBound() {
@@ -263,6 +298,24 @@ public class Controller implements Initializable {
         }
 
         changeFieldValidation(rightBoundIntervalField, isValid);
+    }
+
+    private void validateProcessButton() {
+        processButton.setDisable(invalidControls.size() != 0);
+    }
+
+    private void initProcessButton() {
+        processButton.setDisable(true);
+        processButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                validateProcessButton();
+
+                if (!processButton.isDisabled()) {
+                    //TODO: call process
+                }
+            }
+        });
     }
 
     private void initResultsSection() {
