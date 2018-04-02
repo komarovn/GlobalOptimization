@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
@@ -22,6 +24,7 @@ public class Controller implements Initializable {
 
     private AppModel model;
     private Set<Control> invalidControls = new HashSet<Control>();
+    private XYChart.Series<Double, Double> functionSeries;
 
     @FXML
     private Button processButton;
@@ -30,7 +33,7 @@ public class Controller implements Initializable {
     private TextField functionField;
 
     @FXML
-    private Pane plotArea;
+    private LineChart<Double, Double> plotArea;
 
     // Method Props
 
@@ -82,6 +85,7 @@ public class Controller implements Initializable {
         initIntervalFields();
         initProcessButton();
         initResultsSection();
+        initPlot();
     }
 
     private void initMethodSelector() {
@@ -94,8 +98,8 @@ public class Controller implements Initializable {
         methodSelector.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Method>() {
             @Override
             public void changed(ObservableValue<? extends Method> observable, Method oldValue, Method value) {
-                invalidControls.remove(methodSelector);
                 model.setMethodName(value.getValue());
+                changeFieldValidation(methodSelector, true);
 
                 boolean isLipschitzMethod = "piyavskii".equals(value.getValue()) || "strongin".equals(value.getValue());
 
@@ -108,7 +112,6 @@ public class Controller implements Initializable {
 
                 rLabel.setVisible(isLipschitzMethod);
                 rValueField.setVisible(isLipschitzMethod);
-                validateProcessButton();
             }
         });
     }
@@ -125,8 +128,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
                 if (!isFocused) {
-                    changeFieldValidation(functionField, model.validateFunctionExpression());
-                    validateProcessButton();
+                    processFunctionField();
                 }
             }
         });
@@ -179,7 +181,6 @@ public class Controller implements Initializable {
                     }
 
                     changeFieldValidation(stopByValueField, isValid);
-                    validateProcessButton();
                 }
             }
         });
@@ -207,7 +208,6 @@ public class Controller implements Initializable {
                 if (!isFocused) {
                     processLeftBound();
                     processRightBound();
-                    validateProcessButton();
                 }
             }
         });
@@ -217,13 +217,12 @@ public class Controller implements Initializable {
                 if (!isFocused) {
                     processRightBound();
                     processLeftBound();
-                    validateProcessButton();
                 }
             }
         });
     }
 
-    private void changeFieldValidation(TextField field, boolean isValid) {
+    private void changeFieldValidation(Control field, boolean isValid) {
         if (isValid) {
             field.getStyleClass().remove(INVALID_FIELD_CLS);
             invalidControls.remove(field);
@@ -234,6 +233,8 @@ public class Controller implements Initializable {
                 field.getStyleClass().add(INVALID_FIELD_CLS);
             }
         }
+
+        validateProcessButton();
     }
 
     private boolean validateDoubleValue(String value) {
@@ -254,6 +255,16 @@ public class Controller implements Initializable {
         return true;
     }
 
+    private void processFunctionField() {
+        boolean isValid = model.validateFunctionExpression();
+
+        if (isValid) {
+            updateChartData();
+        }
+
+        changeFieldValidation(functionField, isValid);
+    }
+
     private void processRValue() {
         boolean isValid = validateDoubleValue(rValueField.getText());
 
@@ -263,7 +274,6 @@ public class Controller implements Initializable {
         }
 
         changeFieldValidation(rValueField, isValid);
-        validateProcessButton();
     }
 
     private void processLeftBound() {
@@ -320,6 +330,19 @@ public class Controller implements Initializable {
 
     private void initResultsSection() {
         setVisibilityResultsSection(false);
+    }
+
+    private void initPlot() {
+        functionSeries = new XYChart.Series<Double, Double>();
+        plotArea.getData().add(functionSeries);
+    }
+
+    public void updateChartData() {
+        plotArea.setAnimated(false);
+        functionSeries.getData().clear();
+        plotArea.setAnimated(true);
+        functionSeries.getData().add(new XYChart.Data<Double, Double>(3.0, 4.0));
+        functionSeries.getData().add(new XYChart.Data<Double, Double>(5.0, 2.0));
     }
 
     public void updateResultSection() {
