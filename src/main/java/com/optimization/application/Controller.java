@@ -12,9 +12,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.*;
@@ -202,6 +205,8 @@ public class Controller implements Initializable {
     private void initIntervalFields() {
         invalidControls.add(leftBoundIntervalField);
         invalidControls.add(rightBoundIntervalField);
+        leftBoundIntervalField.setText(String.valueOf(0.0));
+        rightBoundIntervalField.setText(String.valueOf(0.0));
         leftBoundIntervalField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
@@ -284,9 +289,10 @@ public class Controller implements Initializable {
             double right = model.getRightBoundInterval();
 
             if (left <= right) {
+                isValid = true;
                 model.setLeftBoundInterval(left);
                 leftBoundIntervalField.setText(String.valueOf(model.getLeftBoundInterval()));
-                isValid = true;
+                updateChartData();
             }
         }
 
@@ -301,9 +307,10 @@ public class Controller implements Initializable {
             double right = Double.valueOf(rightBoundIntervalField.getText());
 
             if (left <= right) {
+                isValid = true;
                 model.setRightBoundInterval(right);
                 rightBoundIntervalField.setText(String.valueOf(model.getRightBoundInterval()));
-                isValid = true;
+                updateChartData();
             }
         }
 
@@ -335,14 +342,33 @@ public class Controller implements Initializable {
     private void initPlot() {
         functionSeries = new XYChart.Series<Double, Double>();
         plotArea.getData().add(functionSeries);
+        plotArea.getXAxis().setAutoRanging(false);
     }
 
     public void updateChartData() {
         plotArea.setAnimated(false);
         functionSeries.getData().clear();
         plotArea.setAnimated(true);
-        functionSeries.getData().add(new XYChart.Data<Double, Double>(3.0, 4.0));
-        functionSeries.getData().add(new XYChart.Data<Double, Double>(5.0, 2.0));
+
+        double lowerBound = model.getLeftBoundInterval();
+        double upperBound = model.getRightBoundInterval();
+        double delta = upperBound - lowerBound;
+        double increment = Math.max(delta * 0.01, 0.005);
+        double epsilon = delta * 0.1;
+        epsilon = -0.0001 < epsilon && epsilon < 0.0001 ? 10.0 : epsilon;
+
+        // Expand visible interval of X-axis by 10 per cent of length to both sides.
+        lowerBound -= epsilon;
+        upperBound += epsilon;
+
+        ((ValueAxis<Double>) plotArea.getXAxis()).setLowerBound(lowerBound);
+        ((ValueAxis<Double>) plotArea.getXAxis()).setUpperBound(upperBound);
+
+        for (double x = lowerBound; x < upperBound; x += increment) {
+            XYChart.Data<Double, Double> data = new XYChart.Data<Double, Double>(x, model.getFunctionValue(x));
+            functionSeries.getData().add(data);
+            data.getNode().setVisible(false);
+        }
     }
 
     public void updateResultSection() {

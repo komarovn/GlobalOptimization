@@ -52,6 +52,11 @@ public class AppModel {
         return validationResult;
     }
 
+    public double getFunctionValue(double arg) {
+        Expression exp = (new ExpressionBuilder(getFunctionExpression())).variable("x").build();
+        return exp.setVariable("x", arg).evaluate();
+    }
+
     public String getMethodName() {
         return methodName;
     }
