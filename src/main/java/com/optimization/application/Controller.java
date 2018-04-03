@@ -121,12 +121,6 @@ public class Controller implements Initializable {
 
     private void initFunctionField() {
         invalidControls.add(functionField);
-        functionField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String value) {
-                model.setFunctionExpression(value);
-            }
-        });
         functionField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
@@ -261,13 +255,14 @@ public class Controller implements Initializable {
     }
 
     private void processFunctionField() {
-        boolean isValid = model.validateFunctionExpression();
-
-        if (isValid) {
-            updateChartData();
-        }
+        boolean isValid = model.validateFunctionExpression(functionField.getText());
 
         changeFieldValidation(functionField, isValid);
+
+        if (isValid) {
+            model.setFunctionExpression(functionField.getText());
+            updateChartData();
+        }
     }
 
     private void processRValue() {
@@ -353,7 +348,7 @@ public class Controller implements Initializable {
         double lowerBound = model.getLeftBoundInterval();
         double upperBound = model.getRightBoundInterval();
         double delta = upperBound - lowerBound;
-        double increment = Math.max(delta * 0.01, 0.005);
+        double increment = Math.max(delta * 0.01, 0.01);
         double epsilon = delta * 0.1;
         epsilon = -0.0001 < epsilon && epsilon < 0.0001 ? 10.0 : epsilon;
 
@@ -364,10 +359,12 @@ public class Controller implements Initializable {
         ((ValueAxis<Double>) plotArea.getXAxis()).setLowerBound(lowerBound);
         ((ValueAxis<Double>) plotArea.getXAxis()).setUpperBound(upperBound);
 
-        for (double x = lowerBound; x < upperBound; x += increment) {
-            XYChart.Data<Double, Double> data = new XYChart.Data<Double, Double>(x, model.getFunctionValue(x));
-            functionSeries.getData().add(data);
-            data.getNode().setVisible(false);
+        if (!invalidControls.contains(functionField)) {
+            for (double x = lowerBound; x < upperBound; x += increment) {
+                XYChart.Data<Double, Double> data = new XYChart.Data<Double, Double>(x, model.getFunctionValue(x));
+                functionSeries.getData().add(data);
+                data.getNode().setVisible(false);
+            }
         }
     }
 

@@ -6,7 +6,8 @@ import net.objecthunter.exp4j.ValidationResult;
 import net.objecthunter.exp4j.tokenizer.UnknownFunctionOrVariableException;
 
 public class AppModel {
-    private String functionExpression;
+    private Expression expression;
+    private String variableName;
     private String methodName;
     private int iterationsCount;
     private double precision;
@@ -19,25 +20,36 @@ public class AppModel {
     private double functionValueResult;
 
     public String getFunctionExpression() {
-        return functionExpression;
+        return expression.toString();
     }
 
     public void setFunctionExpression(String functionExpression) {
-        this.functionExpression = functionExpression;
+        // We suppose that validation has been performed.
+        ExpressionBuilder builder = new ExpressionBuilder(functionExpression);
+
+        try {
+            expression = builder.build();
+            variableName = null;
+            // This is constant function.
+        } catch (UnknownFunctionOrVariableException e) {
+            // Retrieve variable name.
+            variableName = e.getToken();
+            expression = builder.variable(variableName).build();
+        }
     }
 
-    public boolean validateFunctionExpression() {
+    public boolean validateFunctionExpression(String functionExpression) {
         boolean validationResult = false;
 
         try {
-            Expression exp = (new ExpressionBuilder(getFunctionExpression())).build();
+            Expression exp = (new ExpressionBuilder(functionExpression)).build();
             ValidationResult result = exp.validate();
             validationResult = result.isValid();
         } catch (UnknownFunctionOrVariableException e1) {
             // We can pass only one variable in expression.
             String var = e1.getToken();
             try {
-                Expression exp = (new ExpressionBuilder(getFunctionExpression())).variable(var).build();
+                Expression exp = (new ExpressionBuilder(functionExpression)).variable(var).build();
                 exp.setVariable(var, 0);
                 ValidationResult result = exp.validate();
                 validationResult = result.isValid();
@@ -53,8 +65,7 @@ public class AppModel {
     }
 
     public double getFunctionValue(double arg) {
-        Expression exp = (new ExpressionBuilder(getFunctionExpression())).variable("x").build();
-        return exp.setVariable("x", arg).evaluate();
+        return variableName != null ? expression.setVariable(variableName, arg).evaluate() : expression.evaluate();
     }
 
     public String getMethodName() {
