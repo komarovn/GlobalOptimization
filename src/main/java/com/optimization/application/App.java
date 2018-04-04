@@ -23,6 +23,8 @@ public class App extends Application {
 
         primaryStage.setTitle(StringResources.APP_NAME);
         primaryStage.setScene(new Scene(root, 1000, 460));
+        primaryStage.setMinHeight(380);
+        primaryStage.setMinWidth(800);
         primaryStage.show();
     }
 
