@@ -77,7 +77,7 @@
               <Insets left="16" right="16" />
           </padding>
          <children>
-             <HBox alignment="CENTER_LEFT" >
+             <HBox alignment="CENTER_LEFT">
                  <children>
                      <Label maxWidth="68.0" minWidth="68.0" text="Method:">
                          <font>
@@ -150,9 +150,9 @@
              </HBox>
          </children>
       </HBox>
-      <LineChart fx:id="plotArea" legendVisible="false">
+      <LineChart fx:id="plotArea" VBox.vgrow="ALWAYS" legendVisible="false">
         <xAxis>
-          <NumberAxis prefWidth="493.0" side="BOTTOM" />
+          <NumberAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis side="LEFT" />

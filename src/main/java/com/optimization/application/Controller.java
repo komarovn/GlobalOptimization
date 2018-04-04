@@ -349,7 +349,7 @@ public class Controller implements Initializable {
         double lowerBound = model.getLeftBoundInterval();
         double upperBound = model.getRightBoundInterval();
         double delta = upperBound - lowerBound;
-        double increment = Math.max(delta * 0.01, 0.01);
+        double increment = Math.max(delta * 0.005, 0.01);
         double epsilon = delta * 0.1;
         epsilon = -0.0001 < epsilon && epsilon < 0.0001 ? 10.0 : epsilon;
 
