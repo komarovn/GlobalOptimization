@@ -16,6 +16,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -53,7 +54,7 @@ public class Controller implements Initializable {
     private TextField stopByValueField;
 
     @FXML
-    private Label rLabel;
+    private Pane rValuePane;
 
     @FXML
     private TextField rValueField;
@@ -113,8 +114,8 @@ public class Controller implements Initializable {
                     invalidControls.remove(rValueField);
                 }
 
-                rLabel.setVisible(isLipschitzMethod);
-                rValueField.setVisible(isLipschitzMethod);
+                rValuePane.setManaged(isLipschitzMethod);
+                rValuePane.setVisible(isLipschitzMethod);
             }
         });
     }
@@ -184,8 +185,8 @@ public class Controller implements Initializable {
     }
 
     private void initRValueField() {
-        rValueField.setVisible(false);
-        rLabel.setVisible(false);
+        rValuePane.setManaged(false);
+        rValuePane.setVisible(false);
         rValueField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
