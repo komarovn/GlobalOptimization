@@ -4,7 +4,6 @@
  */
 package com.optimization.core;
 
-public class OptimizationAlgorythms {
-
+public class StronginMethod extends AbstractMethod {
 
 }
