@@ -61,3 +61,11 @@
 .radio-button:selected .dot {
     -fx-background-color: #2f93e1;
 }
+
+.plot__interval-marker {
+    -fx-stroke: #2f93e1;
+}
+
+.plot__tick {
+    -fx-stroke: #40b97c;
+}

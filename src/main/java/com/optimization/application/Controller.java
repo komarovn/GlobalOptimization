@@ -11,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
@@ -33,7 +32,7 @@ public class Controller implements Initializable {
     private TextField functionField;
 
     @FXML
-    private ExtendedLineChart<Double, Double> plotArea;
+    private ExtendedLineChart plotArea;
 
     // Method Props
 
