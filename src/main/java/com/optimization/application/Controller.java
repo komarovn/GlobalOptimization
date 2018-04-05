@@ -11,14 +11,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 
 import java.net.URL;
 import java.util.*;
@@ -37,7 +33,7 @@ public class Controller implements Initializable {
     private TextField functionField;
 
     @FXML
-    private LineChart<Double, Double> plotArea;
+    private ExtendedLineChart<Double, Double> plotArea;
 
     // Method Props
 

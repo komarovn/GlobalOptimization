@@ -19,7 +19,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optimization.application.Controller">
+<?import com.optimization.application.ExtendedLineChart?>
+
+<VBox stylesheets="@../css/styles.css" xmlns:sd="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.optimization.application.Controller">
     <children>
       <HBox maxHeight="52.0" minHeight="52.0">
           <padding>
@@ -150,17 +152,14 @@
              </HBox>
          </children>
       </HBox>
-      <LineChart fx:id="plotArea" VBox.vgrow="ALWAYS" legendVisible="false">
+      <ExtendedLineChart fx:id="plotArea" VBox.vgrow="ALWAYS" legendVisible="false">
         <xAxis>
           <NumberAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis side="LEFT" />
         </yAxis>
-         <cursor>
-            <Cursor fx:constant="CROSSHAIR" />
-         </cursor>
-      </LineChart>
+      </ExtendedLineChart>
       <HBox alignment="CENTER_LEFT" maxHeight="52.0" minHeight="52.0">
           <padding>
               <Insets bottom="12" left="16" right="16" />
