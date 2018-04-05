@@ -334,30 +334,16 @@ public class Controller implements Initializable {
     private void initPlot() {
         functionSeries = new XYChart.Series<Double, Double>();
         plotArea.getData().add(functionSeries);
-        plotArea.getXAxis().setAutoRanging(false);
     }
 
     public void updateChartData() {
-        plotArea.setAnimated(false);
-        functionSeries.getData().clear();
-        plotArea.setAnimated(true);
-
-        double lowerBound = model.getLeftBoundInterval();
-        double upperBound = model.getRightBoundInterval();
-        double delta = upperBound - lowerBound;
-        double increment = Math.max(delta * 0.005, 0.01);
-        double epsilon = delta * 0.1;
-        epsilon = -0.0001 < epsilon && epsilon < 0.0001 ? 10.0 : epsilon;
-
-        // Expand visible interval of X-axis by 10 per cent of length to both sides.
-        lowerBound -= epsilon;
-        upperBound += epsilon;
-
-        ((ValueAxis<Double>) plotArea.getXAxis()).setLowerBound(lowerBound);
-        ((ValueAxis<Double>) plotArea.getXAxis()).setUpperBound(upperBound);
+        plotArea.clearSeries(functionSeries);
+        plotArea.setInterval(model.getLeftBoundInterval(), model.getRightBoundInterval());
+        double left = plotArea.getLeftBoundInterval();
+        double right = plotArea.getRightBoundInterval();
 
         if (!invalidControls.contains(functionField)) {
-            for (double x = lowerBound; x < upperBound; x += increment) {
+            for (double x = left; x <= right; x += plotArea.getIncrement()) {
                 XYChart.Data<Double, Double> data = new XYChart.Data<Double, Double>(x, model.getFunctionValue(x));
                 functionSeries.getData().add(data);
                 data.getNode().setVisible(false);
