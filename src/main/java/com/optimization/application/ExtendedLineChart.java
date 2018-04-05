@@ -119,19 +119,19 @@ public class ExtendedLineChart extends LineChart<Double, Double> {
     protected void layoutPlotChildren() {
         super.layoutPlotChildren();
 
-        drawVerticalLine(leftBoundMarker);
-        drawVerticalLine(rightBoundMarker);
+        drawVerticalLine(leftBoundMarker, -1);
+        drawVerticalLine(rightBoundMarker, -1);
 
         for (Data<Double, Double> marker : ticks) {
-            drawVerticalLine(marker);
+            drawVerticalLine(marker, 80);
         }
     }
 
-    private void drawVerticalLine(Data<Double, Double> marker) {
+    private void drawVerticalLine(Data<Double, Double> marker, double height) {
         Line line = (Line) marker.getNode();
         line.setStartX(getXAxis().getDisplayPosition(marker.getXValue()));
         line.setEndX(line.getStartX());
-        line.setStartY(0.0);
+        line.setStartY(getBoundsInLocal().getHeight() - (height < 0 ? getBoundsInLocal().getHeight() : height));
         line.setEndY(getBoundsInLocal().getHeight());
         line.toFront();
     }
