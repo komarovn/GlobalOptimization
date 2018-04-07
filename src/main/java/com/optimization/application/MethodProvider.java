@@ -59,11 +59,11 @@ public class MethodProvider {
 
     private void makeTick() {
         final double arg = method.getCurrentArgumentValue();
-        /*try {
-            Thread.sleep(1000);
+        try {
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

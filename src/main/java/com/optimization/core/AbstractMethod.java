@@ -106,4 +106,20 @@ public abstract class AbstractMethod {
     public double getCurrentFunctionValue() {
         return currentFunctionValue;
     }
+
+    protected double computeM() {
+        double M = 0.0;
+
+        for (int i = 0; i < points.size() - 1; i++) {
+            double deltaZ = Math.abs(functionValues.get(i + 1) - functionValues.get(i));
+            double deltaX = points.get(i + 1) - points.get(i);
+            double newM = deltaZ / deltaX;
+
+            if (newM > M) {
+                M = newM;
+            }
+        }
+
+        return M;
+    }
 }
