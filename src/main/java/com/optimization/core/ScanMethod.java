@@ -13,7 +13,13 @@ public class ScanMethod extends AbstractMethod {
     }
 
     @Override
-    public void processStep() {
+    protected double calculateCharacteristic(int i) {
+        return points.get(i + 1) - points.get(i);
+    }
 
+    @Override
+    protected double calculateNextPoint() {
+        int bestCharacteristicIndex = getBestCharacteristicIndex();
+        return 0.5 * (points.get(bestCharacteristicIndex + 1) + points.get(bestCharacteristicIndex));
     }
 }

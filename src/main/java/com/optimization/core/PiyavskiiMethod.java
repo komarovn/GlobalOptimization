@@ -7,15 +7,20 @@ package com.optimization.core;
 import net.objecthunter.exp4j.Expression;
 
 public class PiyavskiiMethod extends AbstractMethod {
-    private double r;
+    private double rParam;
 
-    public PiyavskiiMethod(Expression functionExpression, String variable, double leftBound, double rightBound, double r) {
+    public PiyavskiiMethod(Expression functionExpression, String variable, double leftBound, double rightBound, double rParam) {
         super(functionExpression, variable, leftBound, rightBound);
-        this.r = r;
+        this.rParam = rParam;
     }
 
     @Override
-    public void processStep() {
+    protected double calculateCharacteristic(int i) {
+        return 0.0;
+    }
 
+    @Override
+    protected double calculateNextPoint() {
+        return 0;
     }
 }
