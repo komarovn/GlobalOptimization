@@ -8,6 +8,7 @@ import com.optimization.core.AbstractMethod;
 import com.optimization.core.PiyavskiiMethod;
 import com.optimization.core.ScanMethod;
 import com.optimization.core.StronginMethod;
+import javafx.application.Platform;
 
 public class MethodProvider {
     private AppModel data;
@@ -40,6 +41,8 @@ public class MethodProvider {
 
             for (int i = 0; i < iterationsCount; i++) {
                 method.processStep();
+                currentIterationsCount++;
+                makeTick();
             }
         }
 
@@ -54,19 +57,39 @@ public class MethodProvider {
         this.app = app;
     }
 
+    private void makeTick() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                app.getPlotArea().addTickMarker(method.getCurrentArgumentValue());
+            }
+        });
+    }
+
     private void publishResults() {
         data.setIterationsCountResult(currentIterationsCount);
         data.setArgumentValueResult(method.getCurrentArgumentValue());
         data.setFunctionValueResult(method.getCurrentFunctionValue());
-        app.updateResultSection();
-        app.setVisibilityResultsSection(true);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                app.updateResultSection();
+                app.setVisibilityResultsSection(true);
+            }
+        });
     }
 
     public void reset() {
         currentPrecision = Double.MAX_VALUE;
         currentIterationsCount = 0;
         method = null;
-        app.getPlotArea().clearTicks();
-        app.setVisibilityResultsSection(false);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                app.getPlotArea().clearTicks();
+                app.setVisibilityResultsSection(false);
+            }
+        });
     }
 }

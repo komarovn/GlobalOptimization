@@ -335,8 +335,14 @@ public class Controller implements Initializable {
                 validateProcessButton();
 
                 if (!processButton.isDisabled()) {
-                    provider.reset();
-                    provider.process();
+                    // Execute task in background.
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            provider.reset();
+                            provider.process();
+                        }
+                    }.start();
                 }
             }
         });
