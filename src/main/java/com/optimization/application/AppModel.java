@@ -9,6 +9,7 @@ public class AppModel {
     private Expression expression;
     private String variableName;
     private String methodName;
+    private boolean stopByPrecision = true;
     private int iterationsCount;
     private double precision;
     private double rParameter;
@@ -19,8 +20,12 @@ public class AppModel {
     private double argumentValueResult;
     private double functionValueResult;
 
-    public String getFunctionExpression() {
-        return expression.toString();
+    public Expression getFunctionExpression() {
+        return expression;
+    }
+
+    public String getVariableName() {
+        return variableName;
     }
 
     public void setFunctionExpression(String functionExpression) {
@@ -74,6 +79,14 @@ public class AppModel {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
+    }
+
+    public boolean isStopByPrecision() {
+        return stopByPrecision;
+    }
+
+    public void setStopByPrecision(boolean stopByPrecision) {
+        this.stopByPrecision = stopByPrecision;
     }
 
     public int getIterationsCount() {

@@ -4,6 +4,7 @@
  */
 package com.optimization.application;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,6 +23,7 @@ public class Controller implements Initializable {
     private final String INVALID_FIELD_CLS = "text-field__invalid";
 
     private AppModel model;
+    private MethodProvider provider;
     private Set<Control> invalidControls = new HashSet<Control>();
     private XYChart.Series<Double, Double> functionSeries;
 
@@ -73,6 +75,10 @@ public class Controller implements Initializable {
 
     public void setModel(AppModel model) {
         this.model = model;
+    }
+
+    public void setProvider(MethodProvider provider) {
+        this.provider = provider;
     }
 
     @Override
@@ -129,10 +135,18 @@ public class Controller implements Initializable {
 
     private void initStopParamField() {
         invalidControls.add(stopByValueField);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                precisionRadio.setSelected(model.isStopByPrecision());
+                iterationsCountRadio.setSelected(!model.isStopByPrecision());
+            }
+        });
         precisionRadio.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean selected) {
                 if (selected) {
+                    model.setStopByPrecision(true);
                     stopByValueField.setText(String.valueOf(model.getPrecision()));
                 } else {
                     changeFieldValidation(stopByValueField, true);
@@ -143,6 +157,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean selected) {
                 if (selected) {
+                    model.setStopByPrecision(false);
                     stopByValueField.setText(String.valueOf(model.getIterationsCount()));
                 } else {
                     changeFieldValidation(stopByValueField, true);
@@ -320,7 +335,8 @@ public class Controller implements Initializable {
                 validateProcessButton();
 
                 if (!processButton.isDisabled()) {
-                    //TODO: call process
+                    provider.reset();
+                    provider.process();
                 }
             }
         });
@@ -348,6 +364,10 @@ public class Controller implements Initializable {
                 data.getNode().setVisible(false);
             }
         }
+    }
+
+    public ExtendedLineChart getPlotArea() {
+        return plotArea;
     }
 
     public void updateResultSection() {

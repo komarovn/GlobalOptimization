@@ -21,6 +21,12 @@ public class App extends Application {
         AppModel model = new AppModel();
         controller.setModel(model);
 
+        MethodProvider provider = new MethodProvider();
+        provider.setData(model);
+        provider.setApp(controller);
+
+        controller.setProvider(provider);
+
         primaryStage.setTitle(StringResources.APP_NAME);
         primaryStage.setScene(new Scene(root, 1000, 460));
         primaryStage.setMinHeight(380);

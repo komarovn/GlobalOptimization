@@ -4,6 +4,18 @@
  */
 package com.optimization.core;
 
-public class StronginMethod extends AbstractMethod {
+import net.objecthunter.exp4j.Expression;
 
+public class StronginMethod extends AbstractMethod {
+    private double r;
+
+    public StronginMethod(Expression functionExpression, String variable, double leftBound, double rightBound, double r) {
+        super(functionExpression, variable, leftBound, rightBound);
+        this.r = r;
+    }
+
+    @Override
+    public void processStep() {
+
+    }
 }
