@@ -69,3 +69,9 @@
 .plot__tick {
     -fx-stroke: #40b97c;
 }
+
+.validation-tooltip {
+    -fx-background-color: #df3629;
+    -fx-padding: 0 12px;
+    -fx-effect: none;
+}

@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.PopupWindow;
 
 import java.net.URL;
 import java.util.*;
@@ -104,7 +105,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Method> observable, Method oldValue, Method value) {
                 model.setMethodName(value.getValue());
-                changeFieldValidation(methodSelector, true);
+                changeFieldValidation(methodSelector, true, null);
 
                 boolean isLipschitzMethod = "piyavskii".equals(value.getValue()) || "strongin".equals(value.getValue());
 
@@ -112,7 +113,7 @@ public class Controller implements Initializable {
                     invalidControls.add(rValueField);
                     processRValue();
                 } else {
-                    invalidControls.remove(rValueField);
+                    changeFieldValidation(rValueField, true, null);
                 }
 
                 rValuePane.setManaged(isLipschitzMethod);
@@ -149,7 +150,7 @@ public class Controller implements Initializable {
                     model.setStopByPrecision(true);
                     stopByValueField.setText(String.valueOf(model.getPrecision()));
                 } else {
-                    changeFieldValidation(stopByValueField, true);
+                    changeFieldValidation(stopByValueField, true, null);
                 }
             }
         });
@@ -160,7 +161,7 @@ public class Controller implements Initializable {
                     model.setStopByPrecision(false);
                     stopByValueField.setText(String.valueOf(model.getIterationsCount()));
                 } else {
-                    changeFieldValidation(stopByValueField, true);
+                    changeFieldValidation(stopByValueField, true, null);
                 }
             }
         });
@@ -169,6 +170,7 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean isFocused) {
                 if (!isFocused) {
                     boolean isValid = true;
+                    String validationText = StringResources.VALIDATION_INVALID;
 
                     if (precisionRadio.isSelected()) {
                         isValid = validateDoubleValue(stopByValueField.getText()) &&
@@ -181,6 +183,7 @@ public class Controller implements Initializable {
                     } else if (iterationsCountRadio.isSelected()) {
                         isValid = validateIntValue(stopByValueField.getText()) &&
                                 Integer.valueOf(stopByValueField.getText()) >= 0;
+                        validationText = StringResources.VALIDATION_POSITIVE_INT;
 
                         if (isValid) {
                             model.setIterationsCount(Integer.valueOf(stopByValueField.getText()));
@@ -188,7 +191,7 @@ public class Controller implements Initializable {
                         }
                     }
 
-                    changeFieldValidation(stopByValueField, isValid);
+                    changeFieldValidation(stopByValueField, isValid, validationText);
                 }
             }
         });
@@ -232,11 +235,13 @@ public class Controller implements Initializable {
         });
     }
 
-    private void changeFieldValidation(Control field, boolean isValid) {
+    private void changeFieldValidation(Control field, boolean isValid, String validationText) {
         if (isValid) {
             field.getStyleClass().remove(INVALID_FIELD_CLS);
+            field.setTooltip(null);
             invalidControls.remove(field);
         } else {
+            field.setTooltip(produceValidationTooltip(validationText));
             invalidControls.add(field);
 
             if (!field.getStyleClass().contains(INVALID_FIELD_CLS)) {
@@ -245,6 +250,15 @@ public class Controller implements Initializable {
         }
 
         validateProcessButton();
+    }
+
+    private Tooltip produceValidationTooltip(String text) {
+        Tooltip tooltip = new Tooltip(text);
+        tooltip.getStyleClass().add("validation-tooltip");
+        tooltip.setMaxHeight(24);
+        tooltip.setMinHeight(24);
+        tooltip.setAnchorLocation(PopupWindow.AnchorLocation.CONTENT_BOTTOM_LEFT);
+        return tooltip;
     }
 
     private boolean validateDoubleValue(String value) {
@@ -268,7 +282,7 @@ public class Controller implements Initializable {
     private void processFunctionField() {
         boolean isValid = model.validateFunctionExpression(functionField.getText());
 
-        changeFieldValidation(functionField, isValid);
+        changeFieldValidation(functionField, isValid, StringResources.VALIDATION_INVALID);
 
         if (isValid) {
             model.setFunctionExpression(functionField.getText());
@@ -285,7 +299,7 @@ public class Controller implements Initializable {
             rValueField.setText(String.valueOf(model.getrParameter()));
         }
 
-        changeFieldValidation(rValueField, isValid);
+        changeFieldValidation(rValueField, isValid, StringResources.VALIDATION_R_PARAM);
     }
 
     private void processLeftBound() {
@@ -303,7 +317,7 @@ public class Controller implements Initializable {
             }
         }
 
-        changeFieldValidation(leftBoundIntervalField, isValid);
+        changeFieldValidation(leftBoundIntervalField, isValid, StringResources.VALIDATION_INVALID);
     }
 
     private void processRightBound() {
@@ -321,7 +335,7 @@ public class Controller implements Initializable {
             }
         }
 
-        changeFieldValidation(rightBoundIntervalField, isValid);
+        changeFieldValidation(rightBoundIntervalField, isValid, StringResources.VALIDATION_INVALID);
     }
 
     private void validateProcessButton() {

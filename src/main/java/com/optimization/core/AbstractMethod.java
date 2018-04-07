@@ -88,7 +88,11 @@ public abstract class AbstractMethod {
     }
 
     private double computeFunctionValue(double arg) {
-        return functionExpression.setVariable(variable, arg).evaluate();
+        if (variable != null) {
+            return functionExpression.setVariable(variable, arg).evaluate();
+        } else {
+            return functionExpression.evaluate();
+        }
     }
 
     private void updateFunctionValues() {
