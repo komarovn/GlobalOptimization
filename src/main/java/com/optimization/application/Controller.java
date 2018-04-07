@@ -277,7 +277,8 @@ public class Controller implements Initializable {
     }
 
     private void processRValue() {
-        boolean isValid = validateDoubleValue(rValueField.getText());
+        boolean isValid = validateDoubleValue(rValueField.getText()) &&
+                Double.valueOf(rValueField.getText()) > 1;
 
         if (isValid) {
             model.setrParameter(Double.valueOf(rValueField.getText()));
