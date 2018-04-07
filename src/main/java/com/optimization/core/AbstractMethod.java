@@ -107,6 +107,18 @@ public abstract class AbstractMethod {
         return currentFunctionValue;
     }
 
+    public double getArgmin() {
+        int argminIndex = 0;
+
+        for (int i = 0; i < functionValues.size(); i++) {
+            if (functionValues.get(i) < functionValues.get(argminIndex)) {
+                argminIndex = i;
+            }
+        }
+
+        return points.get(argminIndex);
+    }
+
     protected double computeM() {
         double M = 0.0;
 
