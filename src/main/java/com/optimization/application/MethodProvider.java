@@ -58,10 +58,16 @@ public class MethodProvider {
     }
 
     private void makeTick() {
+        final double arg = method.getCurrentArgumentValue();
+        /*try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                app.getPlotArea().addTickMarker(method.getCurrentArgumentValue());
+                app.getPlotArea().addTickMarker(arg);
             }
         });
     }
@@ -84,6 +90,9 @@ public class MethodProvider {
         currentPrecision = Double.MAX_VALUE;
         currentIterationsCount = 0;
         method = null;
+        data.setIterationsCountResult(currentIterationsCount);
+        data.setArgumentValueResult(0);
+        data.setFunctionValueResult(0);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

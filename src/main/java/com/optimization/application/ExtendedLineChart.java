@@ -101,6 +101,10 @@ public class ExtendedLineChart extends LineChart<Double, Double> {
     }
 
     public void clearTicks() {
+        for (Data<Double, Double> tick : ticks) {
+            removeMarkerLine(tick);
+        }
+
         ticks.clear();
     }
 
@@ -113,6 +117,10 @@ public class ExtendedLineChart extends LineChart<Double, Double> {
 
         marker.setNode(line);
         getPlotChildren().add(line);
+    }
+
+    private void removeMarkerLine(Data<Double, Double> marker) {
+        getPlotChildren().remove(marker.getNode());
     }
 
     @Override

@@ -59,6 +59,7 @@ public abstract class AbstractMethod {
         points.add(currentArgumentValue);
         Collections.sort(points);
         updateFunctionValues();
+        // result should be min of function vals
         currentFunctionValue = computeFunctionValue(currentArgumentValue);
     }
 
