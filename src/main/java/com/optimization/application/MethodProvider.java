@@ -36,13 +36,15 @@ public class MethodProvider {
         if (data.isStopByPrecision()) {
             double precision = data.getPrecision();
 
+            makeStep();
+            while (method.calculatePrecision() > precision) {
+                makeStep();
+            }
         } else {
             int iterationsCount = data.getIterationsCount();
 
             for (int i = 0; i < iterationsCount; i++) {
-                method.processStep();
-                currentIterationsCount++;
-                makeTick();
+                makeStep();
             }
         }
 
@@ -55,6 +57,12 @@ public class MethodProvider {
 
     public void setApp(Controller app) {
         this.app = app;
+    }
+
+    private void makeStep() {
+        method.processStep();
+        currentIterationsCount++;
+        makeTick();
     }
 
     private void makeTick() {

@@ -21,7 +21,8 @@ public abstract class AbstractMethod {
     protected List<Double> functionValues; // z_k
 
     private double currentArgumentValue = 0.0;
-    private double currentFunctionValue = 0.0;
+    private double currentFunctionValue = Double.MAX_VALUE;
+    private double previousFunctionValue = Double.MAX_VALUE;
 
     public AbstractMethod(Expression functionExpression, String variable, double leftBound, double rightBound) {
         this.functionExpression = functionExpression;
@@ -41,10 +42,6 @@ public abstract class AbstractMethod {
         return rightBound;
     }
 
-    protected Expression getFunctionExpression() {
-        return functionExpression;
-    }
-
     public void processStep() {
         // First two values are left and right bounds of interval.
         if (points.size() == 0) {
@@ -59,7 +56,7 @@ public abstract class AbstractMethod {
         points.add(currentArgumentValue);
         Collections.sort(points);
         updateFunctionValues();
-        // result should be min of function vals
+        previousFunctionValue = currentFunctionValue;
         currentFunctionValue = computeFunctionValue(currentArgumentValue);
     }
 
@@ -137,5 +134,9 @@ public abstract class AbstractMethod {
         }
 
         return M;
+    }
+
+    public double calculatePrecision() {
+        return Math.abs(previousFunctionValue - currentFunctionValue);
     }
 }
