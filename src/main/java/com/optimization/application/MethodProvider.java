@@ -81,9 +81,10 @@ public class MethodProvider {
     }
 
     private void publishResults() {
+        double argmin = method.getArgmin();
         data.setIterationsCountResult(currentIterationsCount);
-        data.setArgumentValueResult(method.getCurrentArgumentValue());
-        data.setFunctionValueResult(method.getCurrentFunctionValue());
+        data.setArgumentValueResult(argmin);
+        data.setFunctionValueResult(method.evaluateFunctionValue(argmin));
 
         Platform.runLater(new Runnable() {
             @Override

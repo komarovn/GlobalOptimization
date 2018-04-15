@@ -57,7 +57,7 @@ public abstract class AbstractMethod {
         Collections.sort(points);
         updateFunctionValues();
         previousFunctionValue = currentFunctionValue;
-        currentFunctionValue = computeFunctionValue(currentArgumentValue);
+        currentFunctionValue = evaluateFunctionValue(currentArgumentValue);
     }
 
     private void calculateCharacteristics() {
@@ -84,7 +84,7 @@ public abstract class AbstractMethod {
         return index;
     }
 
-    private double computeFunctionValue(double arg) {
+    public double evaluateFunctionValue(double arg) {
         if (variable != null) {
             return functionExpression.setVariable(variable, arg).evaluate();
         } else {
@@ -96,7 +96,7 @@ public abstract class AbstractMethod {
         functionValues.clear();
 
         for (Double arg : points) {
-            functionValues.add(computeFunctionValue(arg));
+            functionValues.add(evaluateFunctionValue(arg));
         }
     }
 
