@@ -42,7 +42,10 @@
             </HBox>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label maxWidth="70.0" minWidth="70.0" text="Interval:">
+                  <Label text="Interval:">
+                      <padding>
+                          <Insets left="0" right="8" />
+                      </padding>
                      <font>
                         <Font size="14.0" />
                      </font>
